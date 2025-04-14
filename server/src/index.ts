@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import userRoute from "./routes/userRoute"; 
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +16,8 @@ mongoose
     console.error("❌ Error connecting to MongoDB", err);
   });
 
+
+app.use('/user',userRoute)
 
 
 
