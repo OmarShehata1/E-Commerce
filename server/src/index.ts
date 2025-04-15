@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import userRoute from "./routes/userRoute"; 
+import productRoute from "./routes/productRoute";
+import { seedInitialProducts } from "./services/productServices";
 
 const app = express();
 const PORT = 3000;
@@ -17,7 +19,12 @@ mongoose
   });
 
 
+  // seed the products to database
+  seedInitialProducts();
+
 app.use('/user',userRoute)
+app.use("/products", productRoute);
+
 
 
 
