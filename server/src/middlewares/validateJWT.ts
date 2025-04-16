@@ -1,13 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel";
-
-interface ExtendRequest extends Request {
-  user?: any; 
-}
+import { ExtendRequest } from "../types/extendRequest"
 
 const validateJWT = (req: ExtendRequest, res: Response, next: NextFunction) => {
-  const authorization = req.get("authorization"); // Bearer <token>
+  const authorization = req.get("authorization"); 
   if (!authorization) {
     res.status(403).send("Authorization header was not provided");
     return;
@@ -28,11 +25,13 @@ const validateJWT = (req: ExtendRequest, res: Response, next: NextFunction) => {
       res.status(403).send("Invalid token payload");
       return;
     }
+  
     const userPayload = payload as {
       email: string;
       firstName: string;
       lastName: string;
     };
+    
     // fetch user from database using email
     const user = await userModel.findOne({ email: userPayload.email });
     req.user = user;

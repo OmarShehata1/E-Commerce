@@ -1,19 +1,21 @@
-import express from "express";
-import { getActiveCartForUser } from "../services/cartServices";
-import validateJWT from "../middlewares/validateJWT";
+import express from 'express';
+import { addItemToCart, getActiveCartForUser } from '../services/cartServices';
+import validateJWT from '../middlewares/validateJWT';
+import { ExtendRequest } from '../types/extendRequest';
 const router = express.Router();
 
-interface Request {
-  user?: { _id: string; email?: string;} ; 
-}
 
-router.get("/", validateJWT, async (req:any, res) => {
+router.get("/", validateJWT, async (req:ExtendRequest, res) => {
+    const userId = req.user._id;
+    const cart = await getActiveCartForUser({userId});
+    res.status(200).send(cart);
+});
 
-    const userId = req.user._id; 
-    
-  // getActiveCartForUser
-  const cart = await getActiveCartForUser({ userId });
-  res.status(cart.statusCode).send(cart.data);
+router.post("/items", validateJWT, async (req:ExtendRequest, res) => {
+    const userId = req.user._id;
+    const { productId, quantity } = req.body;
+    const response = await addItemToCart({userId, productId , quantity});
+    res.status(response.statusCode).send(response.data);
 });
 
 export default router;

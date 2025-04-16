@@ -3,7 +3,7 @@ import mongoose, {Schema , Document, ObjectId} from "mongoose";
 import { IProduct } from "./productModel";
 
 
-const CartStatusEnum = ["active", "completed", ];
+const CartStatusEnum = ["active", "completed" ];
 
 export interface ICartItem {
     product: IProduct;
@@ -24,14 +24,14 @@ const cartItemSchema = new Schema<ICartItem>({
         ref: "Product",
         required: true,
     },
-    unitPrice: {
-        type: Number,
-        required: true,
-    },
     quantity: {
         type: Number,
         required: true,
         default: 1,
+    },
+    unitPrice: {
+        type: Number,
+        required: true,
     },
 });
 
@@ -44,7 +44,7 @@ const cartSchema = new Schema<ICart>({
     items: [cartItemSchema],
     totalAmount: {
         type: Number,
-        default: 0,
+        required: true,
     },
     status: {
         type: String,
